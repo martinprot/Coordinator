@@ -6,7 +6,7 @@
 //  MIT License · http://choosealicense.com/licenses/mit/
 //
 
-import UIKit
+import Foundation
 
 ///	Protocol to define what is required for an object to be Coordinator.
 ///
@@ -23,9 +23,6 @@ public protocol Coordinating: class {
 
 	///	A dictionary of child Coordinators, where key is Coordinator's identifier property.
 	var childCoordinators: [String: Coordinating] { get }
-
-	///	Returns either `parent` coordinator or `nil` if there isn‘t one
-	var coordinatingResponder: UIResponder? { get }
 
 	///	Tells the coordinator to start, which means at the end of this method it should
 	///	display some UIViewController.

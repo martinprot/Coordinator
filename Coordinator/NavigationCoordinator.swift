@@ -234,3 +234,30 @@ private extension NavigationCoordinator {
 		handlePopBack(to: viewController)
 	}
 }
+
+extension NavigationCoordinator {
+	
+	func push(_ viewController: UIViewController, animated: Bool = true, completion: @escaping () -> Void = {}) {
+		viewControllers.append(viewController)
+		self.rootViewController.pushViewController(viewController, animated: animated)
+		guard animated, let coordinator = self.rootViewController.transitionCoordinator else {
+			completion()
+			return
+		}
+		coordinator.animate(alongsideTransition: nil) { _ in completion() }
+	}
+	
+	func root(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)? = nil) {
+		if animated {
+			self.push(viewController) {
+				self.root(viewController)
+				completion?()
+			}
+		}
+		else {
+			self.root(viewController)
+			completion?()
+		}
+	}
+}
+
