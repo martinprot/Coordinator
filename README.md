@@ -10,7 +10,7 @@ Project forked from very good RadiantTap Coordinator's
 
 https://github.com/radianttap/Coordinator
 
-Although the `Coordinator` par of his lib is excellent, the `UIResponder` part was not my taste.
+Although the `Coordinator` part of his lib is excellent, the `UIResponder` part was not my taste.
 
 So I forked his lib to remove the responder part.
 
