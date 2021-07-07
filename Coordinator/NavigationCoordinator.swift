@@ -237,21 +237,30 @@ private extension NavigationCoordinator {
 
 extension NavigationCoordinator {
 	
-	public func push(_ viewController: UIViewController, animated: Bool = true, completion: @escaping () -> Void = {}) {
+	public func push(_ viewController: UIViewController, animated: Bool = true, completion: (() -> Void)? = nil) {
 		viewControllers.append(viewController)
 		self.rootViewController.pushViewController(viewController, animated: animated)
-		guard animated, let coordinator = self.rootViewController.transitionCoordinator else {
-			completion()
-			return
+		if let completion = completion {
+			guard animated, let coordinator = self.rootViewController.transitionCoordinator else {
+				completion()
+				return
+			}
+			coordinator.animate(alongsideTransition: nil) { _ in completion() }
 		}
-		coordinator.animate(alongsideTransition: nil) { _ in completion() }
 	}
 	
 	public func root(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)? = nil) {
 		if animated {
-			self.push(viewController) {
-				self.root(viewController)
-				completion?()
+			self.viewControllers = [viewController]
+			self.rootViewController.setViewControllers([viewController], animated: true)
+			if let completion = completion {
+				guard let coordinator = rootViewController.transitionCoordinator else {
+					completion()
+					return
+				}
+				coordinator.animate(alongsideTransition: nil) { _ in
+					completion()
+				}
 			}
 		}
 		else {
